@@ -1,0 +1,11 @@
+java_ver: java-1.8.0-openjdk.x86_64
+set_java: jre-1.8.0-openjdk
+user: tomcat
+passwd: tomcat
+shell: /bin/bash
+path: /tomcat
+perm: 0770
+req_tomcat_ver: 8.5.65
+tomcat_url: https://downloads.apache.org/tomcat/tomcat-{{ req_tomcat_ver.split('.')[0] }}/v{{ req_tomcat_ver }}/bin/apache-tomcat-8.5.65.tar.gz
+tomcat_port: 8090
+dep_war: sample.war

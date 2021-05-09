@@ -1,0 +1,49 @@
+--- # tomcat installation with deploying war file and start
+- name: Updating Repo
+  yum:
+          name: "*"
+          state: latest
+- name: Installing Required Java
+  yum:
+          name: "{{java_ver}}"
+          state: latest
+- name: Creating User Tomcat
+  user:
+          name: "{{user}}"
+          password: "{{passwd}}"
+          state: present
+          shell: "{{shell}}"
+          createhome: yes
+          home: /home/{{user}}
+- name: Creating Directory Tomcat in /
+  file:
+          path: "{{path}}"
+          state: directory
+          owner: "{{user}}"
+          group: "{{user}}"
+          mode: "{{perm}}"
+          remote_src: yes
+- name: Downloading Tomcat Tar
+  get_url:
+          url: "{{tomcat_url}}"
+          dest: /{{path}}
+- name: Changing ownership recursive
+  file:
+          path: "{{path}}"
+          state: directory
+          owner: "{{user}}"
+          group: "{{user}}"
+          recurse: yes
+- name: Unarchiving apache tomcat
+  unarchive:
+          src: /tomcat/apache-tomcat-{{req_tomcat_ver}}.tar.gz
+          dest: /tomcat
+          remote_src: yes
+- name: deploying war file
+  copy:
+          src: ./{{dep_war}}
+          dest: /tomcat/apache-tomcat-{{req_tomcat_ver}}/webapps
+          remote_src: yes
+- name: Starting Tomcat Service
+  shell: nohup /tomcat/apache-tomcat-{{req_tomcat_ver}}/bin/startup.sh
+
